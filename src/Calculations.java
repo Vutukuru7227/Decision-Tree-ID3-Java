@@ -38,18 +38,22 @@ public class Calculations {
 				satisfying_instances++;
 				total_instances++;
 			}
+			else {
+				total_instances++;
+			}
 		}
 		
 		double result = ((satisfying_instances/(double)total_instances) * calculateEntropy(class_label_data));
-		
+		System.out.println(label+"="+result);
 		return result;
 	}
 	
 	
 	public double informationGain(int no_of_instances,int[][] data_set,int feature_value_num,int class_label, double base_entropy) {
-		double total_entropy = splitDataEntropy(no_of_instances, 0, data_set, feature_value_num, class_label) - splitDataEntropy(no_of_instances, 1, data_set, feature_value_num, class_label);
+		double total_entropy = splitDataEntropy(no_of_instances, 1, data_set, feature_value_num, class_label) + splitDataEntropy(no_of_instances, 0, data_set, feature_value_num, class_label);
 		
-		double result = total_entropy - base_entropy;
+		System.out.println("Total Entropy="+total_entropy);
+		double result = base_entropy - total_entropy;
 		
 		return result;
 	}
@@ -60,11 +64,11 @@ public class Calculations {
 		return (Math.log(pnValue)/Math.log(2));
 	}
 	
-	public static void main(String[] ar) {
-		int[] dataSet = {1,1,1,1,0,0,0,0};
-		
-		Calculations calc = new Calculations();
-		double entropy = calc.calculateEntropy(dataSet);
-		System.out.println(entropy);
-	}
+//	public static void main(String[] ar) {
+//		int[] dataSet = {1,1,1,1,0,0,0,0};
+//		
+//		Calculations calc = new Calculations();
+//		double entropy = calc.calculateEntropy(dataSet);
+//		System.out.println(entropy);
+//	}
 }

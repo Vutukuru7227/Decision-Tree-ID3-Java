@@ -13,6 +13,7 @@ public class DecisionTree {
 		int no_of_feature_values = 0;
 		int[][] data_set;
 		int no_of_instances = 0;
+
 		
 		Tree decisionTree = new Tree(++count);
 		File training_set = new File(arg);
@@ -66,7 +67,7 @@ public class DecisionTree {
 			
 			decisionTree.setDataSet(data_set);
 			treeRecursion(decisionTree, no_of_instances, no_of_feature_values, base_entropy, feature_values);
-			return decisionTree;
+			//return decisionTree;
 		}catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -109,6 +110,12 @@ public class DecisionTree {
 		double highest_information_gain = 0.0;
 		Calculations calculate = new Calculations();
 		int feature_values_to_be_used = 0;
+		int leftChildElementCounter = 0;
+		int rightChildElementCounter = 0;
+		int leftChildRow = 0;
+		int leftChildColumn = 0;
+		int rightChildRow = 0;
+		int rightChildColumn = 0;
 
 		//TODO: Handle case where there are no instances to classify
 		if(no_of_instances == 0) {
@@ -151,15 +158,84 @@ public class DecisionTree {
 			System.out.println(decision_tree.getObject());
 			return;
 		}
-		
-		
+		System.out.println("Base Entropy="+base_entropy);
+		//TODO: Identify the best attribute to split based on the information gain
 		for(int i=0; i < no_of_feature_values-1 ;i++) {
 			double information_gain = calculate.informationGain(no_of_instances, decision_tree.dataSet, i, no_of_feature_values-1, base_entropy);
+			System.out.println("Information Gain for :"+feature_values[i]+" = "+information_gain);
 			if(information_gain > highest_information_gain) {
 				highest_information_gain = information_gain;
 				feature_values_to_be_used = i;
 			}
 		}
+		
+		//TODO: Get the number of elements on both childs individually
+		for(int i=0;i<no_of_instances;i++) {
+			if(decision_tree.dataSet[i][feature_values_to_be_used] == 0) rightChildElementCounter++;
+			else leftChildElementCounter++;
+		}
+		
+		decision_tree.rCount = no_of_instances;
+		
+		//TODO: Construct the left and right tree from the above details
+		decision_tree.leftChild = new Tree(++count);
+		//decision_tree.leftChild.dataSet = decision_tree.dataSet[no_of_instances][feature_values_to_be_used];
+		decision_tree.leftChild.dataSet = new int[leftChildElementCounter][no_of_feature_values-1];
+		
+		decision_tree.rightChild = new Tree(++count);
+		decision_tree.rightChild.dataSet = new int[rightChildElementCounter][no_of_feature_values-1];
+		
+		//TODO: Filling the left tree components and right tree components
+		for(int i=0;i<no_of_instances;i++) {
+			if(decision_tree.dataSet[i][feature_values_to_be_used] == 1) {
+				for(int j=0;j<no_of_feature_values;j++) {
+					if(j == feature_values_to_be_used) continue;
+					else {
+						decision_tree.leftChild.dataSet[leftChildRow][leftChildColumn] = decision_tree.dataSet[i][j];
+						leftChildColumn++;
+					}
+				}
+				leftChildRow++;
+				leftChildColumn = 0;
+			}else {
+				for(int j =0;j<no_of_feature_values;j++) {
+					if(j == feature_values_to_be_used) continue;
+					else {
+						decision_tree.rightChild.dataSet[rightChildRow][rightChildColumn] = decision_tree.dataSet[i][j];
+						rightChildColumn++;
+					}
+				}
+				rightChildRow++;
+				rightChildColumn = 0;
+			}
+		}
+		
+//		System.out.println("Printing left child values");
+//		for(int i=0;i<leftChildRow;i++) {
+//			for(int j=0;j<no_of_feature_values-1;j++) {
+//				System.out.print(decision_tree.leftChild.dataSet[i][j]+"\t");
+//			}
+//			System.out.println();
+//		}
+//		
+//		System.out.println("============================================");
+//		
+//		System.out.println("Printing right child values");
+//		for(int i=0;i<rightChildRow;i++) {
+//			for(int j=0;j<no_of_feature_values-1;j++) {
+//				System.out.print(decision_tree.rightChild.dataSet[i][j]+"\t");
+//			}
+//			System.out.println();
+//		}
+//		
+//		System.out.println("============================================");
+		
+		System.out.println("Feature to be used:"+feature_values[feature_values_to_be_used]);
+		
+		
+		
+		
+		
 		
 	}
 	
