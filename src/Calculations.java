@@ -1,4 +1,3 @@
-import java.util.Hashtable;
 
 public class Calculations {
 	/*
@@ -25,6 +24,34 @@ public class Calculations {
 		double entropy = ((-pValue) * (logBase2(pValue))) + ((-nValue) * (logBase2(nValue)));
 		
 		return entropy;
+	}
+	
+	public double splitDataEntropy(int no_of_instances, int label, int[][] data_set, int feature_value_num, int class_label) {
+		int[] class_label_data = new int[no_of_instances];
+		int satisfying_instances = 0;
+		int total_instances = 0;
+		
+		for(int i=0, j=0;i<no_of_instances;i++) {
+			if(data_set[i][feature_value_num] == label) {
+				class_label_data[j] = data_set[i][class_label];
+				j++;
+				satisfying_instances++;
+				total_instances++;
+			}
+		}
+		
+		double result = ((satisfying_instances/(double)total_instances) * calculateEntropy(class_label_data));
+		
+		return result;
+	}
+	
+	
+	public double informationGain(int no_of_instances,int[][] data_set,int feature_value_num,int class_label, double base_entropy) {
+		double total_entropy = splitDataEntropy(no_of_instances, 0, data_set, feature_value_num, class_label) - splitDataEntropy(no_of_instances, 1, data_set, feature_value_num, class_label);
+		
+		double result = total_entropy - base_entropy;
+		
+		return result;
 	}
 	
 	

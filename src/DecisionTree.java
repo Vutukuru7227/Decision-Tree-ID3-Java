@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Random;
 import java.util.Scanner;
 
 public class DecisionTree {
@@ -63,6 +64,9 @@ public class DecisionTree {
 			double base_entropy = calculate.calculateEntropy(class_labels);
 			// System.out.println(base_entropy);
 			
+			decisionTree.setDataSet(data_set);
+			treeRecursion(decisionTree, no_of_instances, no_of_feature_values, base_entropy, feature_values);
+			return decisionTree;
 		}catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -101,6 +105,63 @@ public class DecisionTree {
 		return class_labels;
 	}
 	
+	public static void treeRecursion(Tree decision_tree,int no_of_instances,int no_of_feature_values,double base_entropy,String[] feature_values) {
+		double highest_information_gain = 0.0;
+		Calculations calculate = new Calculations();
+		int feature_values_to_be_used = 0;
+
+		//TODO: Handle case where there are no instances to classify
+		if(no_of_instances == 0) {
+			Random random = new Random();
+			decision_tree.setObject(random.nextInt(2));
+			System.out.println(decision_tree.getObject());
+			return;
+		}
+		
+		//TODO: Handle scenario where there is only one feature value left
+		if(no_of_feature_values == 1) {
+			int zeroCounter = 0;
+			int oneCounter = 0;
+			
+			for(int i=0;i<no_of_instances;i++) {
+				if(decision_tree.dataSet[i][0] == 0) zeroCounter++;
+				else oneCounter++;
+			}
+			
+			if(zeroCounter > oneCounter) decision_tree.object = 0;
+			else decision_tree.object = 1;
+			System.out.println(decision_tree.getObject());
+			return;
+		}
+		
+		//TODO: Get the number of class label of each set(values) 
+		int class_one_count = 0;
+		int class_zero_count = 0;
+		
+		for(int i=0;i<no_of_instances;i++) {
+			if(decision_tree.dataSet[i][no_of_feature_values-1] == 1) class_one_count++;
+			else class_zero_count++;
+		}
+		if(class_one_count == no_of_instances) {
+			decision_tree.object = 1;
+			System.out.println(decision_tree.getObject());
+			return;
+		}else if(class_zero_count == no_of_instances){
+			decision_tree.object = 0;
+			System.out.println(decision_tree.getObject());
+			return;
+		}
+		
+		
+		for(int i=0; i < no_of_feature_values-1 ;i++) {
+			double information_gain = calculate.informationGain(no_of_instances, decision_tree.dataSet, i, no_of_feature_values-1, base_entropy);
+			if(information_gain > highest_information_gain) {
+				highest_information_gain = information_gain;
+				feature_values_to_be_used = i;
+			}
+		}
+		
+	}
 	
 	public static void main(String[] args) {
 		DecisionTree dt = new DecisionTree();
