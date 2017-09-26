@@ -2,7 +2,7 @@
 public class Tree {
 	
 	public Tree(int i) {
-		this.nNumber = i;
+		this.nodeId = i;
 		this.leftChild = null;
 		this.rightChild = null;
 	}
@@ -49,47 +49,6 @@ public class Tree {
 		this.object = object;
 	}
 
-	/**
-	 * @return the uAttribute
-	 */
-	public String getuAttribute() {
-		return uAttribute;
-	}
-
-	/**
-	 * @param uAttribute the uAttribute to set
-	 */
-	public void setuAttribute(String uAttribute) {
-		this.uAttribute = uAttribute;
-	}
-
-	/**
-	 * @return the rCount
-	 */
-	public int getrCount() {
-		return rCount;
-	}
-
-	/**
-	 * @param rCount the rCount to set
-	 */
-	public void setrCount(int rCount) {
-		this.rCount = rCount;
-	}
-
-	/**
-	 * @return the nNumber
-	 */
-	public int getnNumber() {
-		return nNumber;
-	}
-
-	/**
-	 * @param nNumber the nNumber to set
-	 */
-	public void setnNumber(int nNumber) {
-		this.nNumber = nNumber;
-	}
 
 	/**
 	 * @return the dataSet
@@ -108,10 +67,54 @@ public class Tree {
 	public Tree leftChild;
 	public Tree rightChild;
 	public int object;
-	public String uAttribute;
-	public int rCount;
-	public int nNumber;
 	public int[][] dataSet;
+	
+	/**
+	 * @return the checkedFeatureValues
+	 */
+	public String getCheckedFeatureValues() {
+		return checkedFeatureValues;
+	}
+
+	/**
+	 * @param checkedFeatureValues the checkedFeatureValues to set
+	 */
+	public void setCheckedFeatureValues(String checkedFeatureValues) {
+		this.checkedFeatureValues = checkedFeatureValues;
+	}
+
+	/**
+	 * @return the instanceCount
+	 */
+	public int getInstanceCount() {
+		return instanceCount;
+	}
+
+	/**
+	 * @param instanceCount the instanceCount to set
+	 */
+	public void setInstanceCount(int instanceCount) {
+		this.instanceCount = instanceCount;
+	}
+
+	/**
+	 * @return the nodeId
+	 */
+	public int getNodeId() {
+		return nodeId;
+	}
+
+	/**
+	 * @param nodeId the nodeId to set
+	 */
+	public void setNodeId(int nodeId) {
+		this.nodeId = nodeId;
+	}
+
+	public String checkedFeatureValues;
+	public int instanceCount;
+	public int nodeId;
+
 	
 	public Tree() {
 		// TODO Auto-generated constructor stub

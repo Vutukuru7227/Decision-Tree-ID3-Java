@@ -1,3 +1,4 @@
+import java.beans.FeatureDescriptor;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Random;
@@ -67,7 +68,7 @@ public class DecisionTree {
 			
 			decisionTree.setDataSet(data_set);
 			treeRecursion(decisionTree, no_of_instances, no_of_feature_values, base_entropy, feature_values);
-			//return decisionTree;
+			return decisionTree;
 		}catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -158,11 +159,12 @@ public class DecisionTree {
 			System.out.println(decision_tree.getObject());
 			return;
 		}
-		System.out.println("Base Entropy="+base_entropy);
+		System.out.println();
+		//System.out.println("Base Entropy="+base_entropy);
 		//TODO: Identify the best attribute to split based on the information gain
 		for(int i=0; i < no_of_feature_values-1 ;i++) {
 			double information_gain = calculate.informationGain(no_of_instances, decision_tree.dataSet, i, no_of_feature_values-1, base_entropy);
-			System.out.println("Information Gain for :"+feature_values[i]+" = "+information_gain);
+			//System.out.println("Information Gain for :"+feature_values[i]+" = "+information_gain);
 			if(information_gain > highest_information_gain) {
 				highest_information_gain = information_gain;
 				feature_values_to_be_used = i;
@@ -175,7 +177,7 @@ public class DecisionTree {
 			else leftChildElementCounter++;
 		}
 		
-		decision_tree.rCount = no_of_instances;
+		decision_tree.instanceCount = no_of_instances;
 		
 		//TODO: Construct the left and right tree from the above details
 		decision_tree.leftChild = new Tree(++count);
@@ -229,14 +231,44 @@ public class DecisionTree {
 //		}
 //		
 //		System.out.println("============================================");
-		
-		System.out.println("Feature to be used:"+feature_values[feature_values_to_be_used]);
-		
-		
-		
+//		
+//		System.out.println("Feature to be used:"+feature_values[feature_values_to_be_used]);
+//		System.out.println("PRINT DUMMY");
 		
 		
+		String[] remaining_attributes = getNewFeatureValueArray(feature_values, feature_values_to_be_used);
 		
+		//Building the left tree recursively
+		decision_tree.leftChild.setCheckedFeatureValues(feature_values[feature_values_to_be_used]);
+
+		for(int count = max_no_of_feature_values; count>no_of_feature_values;count--) System.out.print("| ");
+		System.out.print(decision_tree.leftChild.getCheckedFeatureValues()+"= 1 :");
+		decision_tree.leftChild.instanceCount = leftChildElementCounter;
+		treeRecursion(decision_tree.leftChild, leftChildElementCounter, no_of_feature_values - 1, calculate.calculatePartialSetEntropy(decision_tree.dataSet, no_of_instances, 1, feature_values_to_be_used, no_of_feature_values - 1), remaining_attributes);
+		
+		//Building the right tree recursively
+		decision_tree.rightChild.setCheckedFeatureValues(feature_values[feature_values_to_be_used]);
+		for(int count = max_no_of_feature_values; count>no_of_feature_values;count--) System.out.print("| ");
+		System.out.print(decision_tree.rightChild.getCheckedFeatureValues()+"= 0 :");
+		decision_tree.rightChild.instanceCount = rightChildElementCounter;
+		treeRecursion(decision_tree.rightChild, rightChildElementCounter, no_of_feature_values - 1, calculate.calculatePartialSetEntropy(decision_tree.dataSet, no_of_instances, 0, feature_values_to_be_used, no_of_feature_values - 1), remaining_attributes);
+		
+		
+		
+	}
+	
+	public static String[] getNewFeatureValueArray(String[] Feature_Values, int feature_values_to_be_used) {
+		boolean flag = true;
+		String newFeatureValueStringArray[] = new String[Feature_Values.length-1];
+		for(int i=0,j=0; i< Feature_Values.length;i++) {
+			if(feature_values_to_be_used == i) continue;
+			else {
+				newFeatureValueStringArray[j] = Feature_Values[i];
+				j++;
+			}
+		}
+		
+		return newFeatureValueStringArray;
 	}
 	
 	public static void main(String[] args) {
