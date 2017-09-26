@@ -122,5 +122,26 @@ public class Tree {
 		this.rightChild = null;
 	}
 	
+	public Tree search(Tree tree, int value) {
+		Tree result = null;
+		if(tree.leftChild != null) result.search(tree.leftChild, value);
+		if(tree.getNodeId() == value) return tree;
+		if(result == null && tree.rightChild != null) result = search(tree.rightChild, value);
+		return result;
+	}
+	
+	public int noOfLeafNodes(Tree decision_tree) {
+		int counter = 0;
+		if(decision_tree.leftChild != null || decision_tree.rightChild != null) return 1;
+		else counter = noOfLeafNodes(decision_tree.leftChild) + noOfLeafNodes(decision_tree.rightChild);
+		return counter;
+	}
+	
+	public int noOfInternalNodes(Tree decision_tree) {
+		int counter = 0;
+		if(decision_tree.leftChild != null || decision_tree.rightChild != null) counter = noOfInternalNodes(decision_tree.leftChild) + noOfInternalNodes(decision_tree.rightChild);
+		return counter+1;
+	}
+	
 	
 }
