@@ -21,7 +21,6 @@ public class Accuracy {
 					column_value[i] = Integer.parseInt(str.split(",")[i]);
 				}
 				int index = 0;
-				int value = 0;
 				
 				while(temp_decision_tree.leftChild != null || temp_decision_tree.rightChild != null) {
 					
@@ -49,11 +48,12 @@ public class Accuracy {
 			}
 			temp_decision_tree = decision_tree;
 			
-			System.out.println("No of"+file+"instances:"+total_instances);
-			System.out.println("No of"+file+"attributes:"+(no_of_feature_values-1));
+			System.out.println("Number of "+file+"instances = "+total_instances);
+			System.out.println("Number of"+file+"attributes:"+(no_of_feature_values-1));
 			
 			
-			System.out.println("Accuracy"+file+"dataset"+pruningStatus+":"+((double)(matched/(double)total_instances)*100));
+			System.out.println("Accuracy on the "+file+"dataset = "+((double)(matched/(double)total_instances)*100));
+			sc.close();
 		}catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();

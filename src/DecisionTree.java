@@ -1,4 +1,3 @@
-import java.beans.FeatureDescriptor;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Random;
@@ -258,7 +257,6 @@ public class DecisionTree {
 	}
 	
 	public static String[] getNewFeatureValueArray(String[] Feature_Values, int feature_values_to_be_used) {
-		boolean flag = true;
 		String newFeatureValueStringArray[] = new String[Feature_Values.length-1];
 		for(int i=0,j=0; i< Feature_Values.length;i++) {
 			if(feature_values_to_be_used == i) continue;
@@ -271,8 +269,52 @@ public class DecisionTree {
 		return newFeatureValueStringArray;
 	}
 	
+	
+	
 	public static void main(String[] args) {
+		
 		DecisionTree dt = new DecisionTree();
-		dt.buildTree("./data_sets1/training_set.csv");
+		Tree decision_tree = new Tree();
+		Tree prunedDecisionTree = new Tree();
+		double pruning_factor = Double.parseDouble(args[3]);
+		
+		
+		System.out.println("Pre-Pruned Accuracy");
+		System.out.println("-----------------------------------");
+		//decision_tree = dt.buildTree("./data_sets1/training_set.csv");
+		Accuracy accuracy = new Accuracy();
+		decision_tree = dt.buildTree(args[0]);
+		
+		System.out.println("Number of training instances = "+ decision_tree.instanceCount);
+		System.out.println("Number of training attributes = "+ max_no_of_feature_values);
+		accuracy.calculateAccuracyHeuristics(decision_tree, args[0], " training", "Before Pruning");
+		System.out.println();
+		
+		accuracy.calculateAccuracyHeuristics(decision_tree, args[1], " validation", "Before Pruning");
+		System.out.println();
+		
+		accuracy.calculateAccuracyHeuristics(decision_tree, args[2], " test", "Before Pruning");		
+		System.out.println();
+		
+		System.out.println("==============================================");
+		
+		
+		System.out.println("Post-Pruning Accuracy");
+		System.out.println("---------------------------------");
+		
+		Pruning prune = new Pruning();
+		PrintTree print = new PrintTree();
+		
+		prunedDecisionTree = prune.pruneTree(decision_tree, pruning_factor);
+		print.printTree(prunedDecisionTree, max_no_of_feature_values);
+		//System.out.println("Total Number of nodes: "+ prunedDecisionTree.totalNumNodes(prunedDecisionTree));
+		accuracy.calculateAccuracyHeuristics(prunedDecisionTree, args[0], " Training Set", "After Pruning");
+		System.out.println();
+		
+		accuracy.calculateAccuracyHeuristics(prunedDecisionTree, args[1], " Validation Set", "After Pruning");
+		System.out.println();
+		
+		accuracy.calculateAccuracyHeuristics(prunedDecisionTree, args[2], " Testing Set", "After Pruning");
+		
 	}
 }
